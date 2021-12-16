@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonar-postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: sonar-postgres-pv
+  resources:
+    requests:
+      storage: 50Gi
