@@ -25,7 +25,7 @@ OpenShift:
 
 image:
   repository: sonarqube
-  tag: 8.9.4-community
+  tag: 8.9.5-community
   pullPolicy: IfNotPresent
   # If using a private repository, the name of the imagePullSecret to use
   # pullSecret: my-repo-secret
@@ -64,7 +64,7 @@ ingress:
   enabled: true
   # Used to create an Ingress record.
   hosts:
-    - name: sonarqube.example.com
+    - name: sonar.octoshift.com
       # Different clouds or configurations might need /* as the default path
       path: /
       # For additional control over serviceName and servicePort
@@ -268,7 +268,6 @@ persistence:
 
   ## Specify an existing volume claim instead of creating a new one.
   ## When using this option all following options like storageClass, accessMode and size are ignored.
-  
   existingClaim: sonar-nfs-pvc
 
   ## If defined, storageClassName: <storageClass>
@@ -279,7 +278,7 @@ persistence:
   ##
   storageClass:
   accessMode: ReadWriteOnce
-  size: 5Gi
+  size: 25Gi
   uid: 1000
 
   ## Specify extra volumes. Refer to ".spec.volumes" specification : https://kubernetes.io/fr/docs/concepts/storage/volumes/
@@ -344,7 +343,7 @@ postgresql:
     enabled: true
     accessMode: ReadWriteOnce
     size: 20Gi
-    storageClass: sonar-postgres-pvc
+    storageClass: sonar-nfs-pv
   securityContext:
     # For standard Kubernetes deployment, set enabled=true
     # If using OpenShift, enabled=false for restricted SCC and enabled=true for anyuid/nonroot SCC
@@ -356,13 +355,13 @@ postgresql:
   volumePermissions:
     # For standard Kubernetes deployment, set enabled=false
     # For OpenShift, set enabled=true and ensure to set volumepermissions.securitycontext.runAsUser below.
-    enabled: true
+    enabled: false
     # if using restricted SCC set runAsUser: "auto" and if running under anyuid/nonroot SCC - runAsUser needs to match runAsUser above
     securityContext:
       runAsUser: 0
   shmVolume:
     chmod:
-      enabled: true
+      enabled: false
   serviceAccount:
     ## If enabled = true, and name is not set, postgreSQL will create a serviceAccount
     enabled: false
